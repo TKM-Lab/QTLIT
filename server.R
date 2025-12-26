@@ -151,7 +151,7 @@ server <- function(input, output, session) {
         vcf_file <- file.path(vcf_dir, paste0(sample_name, ".vcf.gz"))
         
         command <- paste0("bcftools mpileup -Ou -f ", shQuote(ref_fasta), " ", shQuote(bam_file),
-                          " | bcftools call -Ou -mv | bcftools filter -s LowQual -e 'QUAL<20 || DP>100' | bcftools view --types snps -m2 -M2 | bgzip > ", 
+                          " | bcftools call -Ou -mv | bcftools filter -s LowQual -e 'QUAL<20 && DP<100' | bcftools view --types snps -m2 -M2 | bgzip > ", 
                           shQuote(vcf_file))
         system(command)
         system(paste("tabix -p vcf", shQuote(vcf_file)))
